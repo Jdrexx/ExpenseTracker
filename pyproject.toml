@@ -1,0 +1,10 @@
+[project]
+name = "ai-expense-tracker"
+version = "0.1.0"
+description = "Import CSV expenses, auto-categorize spending, detect anomalies, and export monthly insights."
+requires-python = ">=3.11"
+dependencies = ["fastapi>=0.115", "uvicorn[standard]>=0.30", "python-multipart>=0.0.9"]
+[dependency-groups]
+dev = ["pytest>=8.0", "httpx>=0.27"]
+[tool.pytest.ini_options]
+pythonpath = ["."]
