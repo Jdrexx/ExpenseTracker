@@ -4,6 +4,8 @@
 
 Import CSV expenses, auto-categorize spending, detect anomalies, and export monthly insights.
 
+![expensetracker-demo](screenshots/expensetracker-demo.png)
+
 ## Why this project exists
 
 This is a portfolio-ready MVP in the **finance automation** lane. It demonstrates practical API product thinking, clean documentation, tests, and a working local browser demo.
