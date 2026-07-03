@@ -18,9 +18,7 @@ def db() -> sqlite3.Connection:
     conn=sqlite3.connect(DB_FILE); conn.row_factory=sqlite3.Row; conn.execute('pragma journal_mode=wal'); return conn
 def init_db() -> None:
     with db() as conn: conn.execute('create table if not exists records (id integer primary key autoincrement, kind text not null, title text not null, payload text not null, created_at text not null)')
-@app.on_event("startup")
-def on_startup() -> None:
-    init_db()
+init_db()
 def save_record(kind: str, title: str, payload: str) -> int:
     with db() as conn:
         cur=conn.execute('insert into records(kind,title,payload,created_at) values (?,?,?,?)',(kind,title,payload,datetime.now(timezone.utc).isoformat())); return int(cur.lastrowid)
@@ -50,11 +48,13 @@ def add_expense(req: ExpenseRequest):
     expense_id=save_record('expense', req.description, json.dumps(payload)); return {'id': expense_id, **payload}
 @app.post('/api/import.csv')
 async def import_csv(file: UploadFile = File(...)):
-    text=(await file.read()).decode('utf-8', errors='ignore'); reader=csv.DictReader(io.StringIO(text)); imported=[]
+    text=(await file.read()).decode('utf-8', errors='ignore'); reader=csv.DictReader(io.StringIO(text)); imported=[]; skipped=0
     for row in reader:
-        desc=row.get('description') or row.get('Description') or row.get('memo') or 'Expense'; amt=float(row.get('amount') or row.get('Amount') or 0)
+        desc=row.get('description') or row.get('Description') or row.get('memo') or 'Expense'
+        try: amt=float(str(row.get('amount') or row.get('Amount') or 0).replace('$','').replace(',','').strip() or 0)
+        except ValueError: skipped += 1; continue
         imported.append(add_expense(ExpenseRequest(description=desc, amount=amt, date=row.get('date') or row.get('Date') or date.today().isoformat())))
-    return {'imported': len(imported), 'expenses': imported}
+    return {'imported': len(imported), 'skipped': skipped, 'expenses': imported}
 @app.get('/api/summary')
 def summary():
     items=[json.loads(r['payload']) for r in rows('expense')]; by_cat=defaultdict(float); total=0.0; anomalies=[]
