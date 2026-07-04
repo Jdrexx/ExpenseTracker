@@ -1,30 +1,24 @@
-# AI Expense Tracker
+# Expense Tracker
 
-![Python](https://img.shields.io/badge/Python-3.11+-blue?style=flat-square&logo=python) ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi) ![SQLite](https://img.shields.io/badge/SQLite-003B57?style=flat-square&logo=sqlite) ![CSV](https://img.shields.io/badge/CSV-4A90D9?style=flat-square&logo=csv) ![Expense Tracking](https://img.shields.io/badge/Expense_Tracking-27AE60?style=flat-square)
+![Python](https://img.shields.io/badge/Python-3.11+-blue?style=flat-square&logo=python)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi)
+![SQLite](https://img.shields.io/badge/SQLite-003B57?style=flat-square&logo=sqlite)
 
-Import CSV expenses, auto-categorize spending, detect anomalies, and export monthly insights.
-
-![expensetracker-demo](screenshots/expensetracker-demo.png)
-
-## Why this project exists
-
-This is a portfolio-ready MVP in the **finance automation** lane. It demonstrates practical API product thinking, clean documentation, tests, and a working local browser demo.
+Import CSV bank exports, auto-categorize transactions, spot anomalies, and export monthly spending summaries. No AI — just deterministic rules and category matching that you can inspect and adjust.
 
 ## Features
 
-- CSV expense import
-- Auto categorization
-- Budget summary dashboard
-- Anomaly detection
-- CSV export for bookkeeping
+- CSV import from bank or credit card exports
+- Rule-based auto-categorization (groceries, dining, utilities, transportation, entertainment, health, shopping, income, and custom labels)
+- Monthly budget summary dashboard
+- Anomaly detection flagged on unusual amounts or frequency
+- CSV export of categorized data for bookkeeping
 
 ## Tech Stack
 
-- Python 3.11+
-- FastAPI
-- SQLite
+- Python 3.11+ / FastAPI / SQLite
 - Vanilla HTML/CSS/JS frontend served by the API
-- Pytest API tests
+- Pytest
 
 ## Quick Start
 
@@ -33,25 +27,20 @@ uv sync
 uv run uvicorn src.main:app --reload --port 8106
 ```
 
-Then open: http://localhost:8106
+Open: http://localhost:8106
 
-Windows one-click launcher: `run.bat`
+Windows: double-click `run.bat`
 
 ## API
 
-- `GET /` - browser demo
-- `GET /api/health` - health check
-- `GET /docs` - interactive FastAPI docs
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/` | Browser demo UI |
+| GET | `/api/health` | Health check |
+| GET | `/docs` | Interactive API docs |
 
-## Verification
+## Tests
 
 ```bash
 uv run pytest -q
 ```
-
-## Roadmap
-
-- Add authenticated user accounts
-- Add production deployment config
-- Replace deterministic helper logic with local Ollama model calls where useful
-- Add screenshots and a short demo GIF
